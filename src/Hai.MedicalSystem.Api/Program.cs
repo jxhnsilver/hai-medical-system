@@ -1,3 +1,4 @@
+using Hai.MedicalSystem.Api.Common.Exceptions;
 using Hai.MedicalSystem.Api.Data;
 using Hai.MedicalSystem.Api.Services.Implementations;
 using Hai.MedicalSystem.Api.Services.Interfaces;
@@ -18,6 +19,17 @@ builder.Services.AddScoped<IPatientService, PatientService>();
 builder.Services.AddScoped<IDoctorService, DoctorService>();
 builder.Services.AddScoped<IDiseaseService, DiseaseService>();
 
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+    });
+
+builder.Services.Configure<RouteOptions>(options => options.LowercaseUrls = true);
+
+builder.Services.AddProblemDetails();
+builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
+
 builder.Services.AddSwaggerGen(options =>
 {
     options.SwaggerDoc("v1", new OpenApiInfo
@@ -37,6 +49,10 @@ builder.Services.AddSwaggerGen(options =>
 var app = builder.Build();
 
 app.MapDefaultEndpoints();
+
+app.UseExceptionHandler();
+
+app.MapControllers();
 
 if (app.Environment.IsDevelopment())
 {
