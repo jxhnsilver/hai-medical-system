@@ -1,0 +1,7 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/Hai.MedicalSystem.Api/Hai.MedicalSystem.Api.csproj" />
+    <Project Path="src/Hai.MedicalSystem.AppHost/Hai.MedicalSystem.AppHost.csproj" Id="ee9a7686-a34f-4e87-8d27-833cab434ac6" />
+    <Project Path="src/Hai.MedicalSystem.ServiceDefaults/Hai.MedicalSystem.ServiceDefaults.csproj" />
+  </Folder>
+</Solution>
