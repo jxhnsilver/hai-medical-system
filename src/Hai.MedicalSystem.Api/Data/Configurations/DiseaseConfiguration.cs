@@ -29,10 +29,6 @@ namespace Hai.MedicalSystem.Api.Data.Configurations
                 .HasMaxLength(5000);
 
             builder.HasIndex(d => d.Code).IsUnique();
-
-            builder.HasMany(d => d.Patients)
-                .WithMany(p => p.Diseases)
-                .UsingEntity(j => j.ToTable("patient_diseases"));
         }
     }
 }

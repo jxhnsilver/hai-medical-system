@@ -1,4 +1,5 @@
-﻿using Hai.MedicalSystem.Api.Entities.Patients;
+﻿using Hai.MedicalSystem.Api.Entities.Diseases;
+using Hai.MedicalSystem.Api.Entities.Patients;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -63,7 +64,21 @@ namespace Hai.MedicalSystem.Api.Data.Configurations
 
             builder.HasMany(p => p.Diseases)
                 .WithMany(d => d.Patients)
-                .UsingEntity(j => j.ToTable("patient_diseases"));
+                .UsingEntity<Dictionary<string, object>>(
+                    "patient_diseases",
+                    right => right
+                        .HasOne<Disease>()
+                        .WithMany()
+                        .HasForeignKey("disease_id"),
+                    left => left
+                        .HasOne<Patient>()
+                        .WithMany()
+                        .HasForeignKey("patient_id"),
+                    join =>
+                    {
+                        join.ToTable("patient_diseases");
+                        join.HasKey("patient_id", "disease_id");
+                    });
         }
     }
 }

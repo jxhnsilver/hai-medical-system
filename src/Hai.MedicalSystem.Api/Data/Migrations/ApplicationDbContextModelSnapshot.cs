@@ -22,21 +22,6 @@ namespace Hai.MedicalSystem.Api.Data.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("DiseasePatient", b =>
-                {
-                    b.Property<Guid>("DiseasesId")
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid>("PatientsId")
-                        .HasColumnType("uuid");
-
-                    b.HasKey("DiseasesId", "PatientsId");
-
-                    b.HasIndex("PatientsId");
-
-                    b.ToTable("patient_diseases", (string)null);
-                });
-
             modelBuilder.Entity("Hai.MedicalSystem.Api.Entities.Diseases.Disease", b =>
                 {
                     b.Property<Guid>("Id")
@@ -195,19 +180,19 @@ namespace Hai.MedicalSystem.Api.Data.Migrations
                     b.ToTable("patients", (string)null);
                 });
 
-            modelBuilder.Entity("DiseasePatient", b =>
+            modelBuilder.Entity("patient_diseases", b =>
                 {
-                    b.HasOne("Hai.MedicalSystem.Api.Entities.Diseases.Disease", null)
-                        .WithMany()
-                        .HasForeignKey("DiseasesId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.Property<Guid>("patient_id")
+                        .HasColumnType("uuid");
 
-                    b.HasOne("Hai.MedicalSystem.Api.Entities.Patients.Patient", null)
-                        .WithMany()
-                        .HasForeignKey("PatientsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.Property<Guid>("disease_id")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("patient_id", "disease_id");
+
+                    b.HasIndex("disease_id");
+
+                    b.ToTable("patient_diseases", (string)null);
                 });
 
             modelBuilder.Entity("Hai.MedicalSystem.Api.Entities.Patients.Patient", b =>
@@ -218,6 +203,21 @@ namespace Hai.MedicalSystem.Api.Data.Migrations
                         .OnDelete(DeleteBehavior.SetNull);
 
                     b.Navigation("CurrentDoctor");
+                });
+
+            modelBuilder.Entity("patient_diseases", b =>
+                {
+                    b.HasOne("Hai.MedicalSystem.Api.Entities.Diseases.Disease", null)
+                        .WithMany()
+                        .HasForeignKey("disease_id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Hai.MedicalSystem.Api.Entities.Patients.Patient", null)
+                        .WithMany()
+                        .HasForeignKey("patient_id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Hai.MedicalSystem.Api.Entities.Doctors.Doctor", b =>
